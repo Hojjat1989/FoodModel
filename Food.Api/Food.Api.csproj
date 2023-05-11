@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Food.Application\Food.Application.csproj" />
+    <ProjectReference Include="..\Food.Core\Food.Core.csproj" />
+    <ProjectReference Include="..\Food.Infrastructure\Food.Infrastructure.csproj" />
+    <ProjectReference Include="..\Food.Services\Food.Services.csproj" />
+  </ItemGroup>
+
+</Project>
