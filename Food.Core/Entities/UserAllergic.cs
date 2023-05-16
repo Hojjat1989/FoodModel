@@ -8,5 +8,5 @@ public class UserAllergic : EntityBase
     public int UserId { get; set; }
     public int IngredientId { get; set; }
 
-    public Ingredient Ingredient { get; set; }
+    public virtual Ingredient Ingredient { get; set; }
 }
