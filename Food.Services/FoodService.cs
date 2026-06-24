@@ -1,4 +1,4 @@
-﻿using Food.Application;
+using Food.Application;
 using Food.Application.DTOs;
 using Food.Core.Base;
 using Food.Core.Entities;
@@ -43,10 +43,8 @@ public class FoodService : IFoodService
 
         var commonCount = (int)(0.7 * targetFoodIngredients.Length);
 
-        var similarFoods = _foodRepository.GetAll(x =>
-            x.FoodIngredients.Count(i => targetFoodIngredients.Contains(i.IngredientId)) >= commonCount);
-
-        var foods = similarFoods.Where(x =>
+        var foods = _foodRepository.GetAll(x =>
+            x.FoodIngredients.Count(i => targetFoodIngredients.Contains(i.IngredientId)) >= commonCount &&
             x.FoodIngredients.All(i => !userAllergicIngredients.Contains(i.IngredientId)));
 
         return foods.Select(x => x.ToFoodDto()).ToArray();

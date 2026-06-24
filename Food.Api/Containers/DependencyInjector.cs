@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Food.Application;
 using Food.Core.Base;
 using Food.Infrastructure;
@@ -13,9 +13,10 @@ public static class DependencyInjector
 
     public static void Register(this IServiceCollection services, IConfigurationSection config)
     {
+        var connectionString = config.GetValue<string>(Sql);
         services.AddDbContext<FoodDbContext>(options =>
         {
-            options.UseSqlServer(config.GetValue<string>(Sql));
+            options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 35)));
         }, ServiceLifetime.Scoped);
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

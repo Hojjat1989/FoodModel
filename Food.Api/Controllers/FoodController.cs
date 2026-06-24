@@ -1,4 +1,4 @@
-﻿using Food.Api.Models;
+using Food.Api.Models;
 using Food.Application;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +18,16 @@ public class FoodController : ControllerBase
     public FoodModel[] GetUserSpecificFoods(int userId)
     {
         var foods = _foodService.GetUserSpecificFoods(userId);
+
+        var result = foods.Select(x => x.ToFoodModel()).ToArray();
+        return result;
+    }
+
+    [HttpGet]
+    [Route("user/{userId}/similar/{foodId}")]
+    public FoodModel[] GetUserSpecificFoods(int userId, int foodId)
+    {
+        var foods = _foodService.GetUserSpecificFoods(userId, foodId);
 
         var result = foods.Select(x => x.ToFoodModel()).ToArray();
         return result;
