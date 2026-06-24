@@ -32,4 +32,36 @@ public class FoodController : ControllerBase
         var result = foods.Select(x => x.ToFoodModel()).ToArray();
         return result;
     }
+
+    [HttpGet]
+    [Route("user/{userId}/paged")]
+    public PagedFoodModel GetUserSpecificFoodsPaged(int userId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var pagedFoods = _foodService.GetUserSpecificFoodsPaged(userId, pageNumber, pageSize);
+
+        return new PagedFoodModel
+        {
+            Data = pagedFoods.Data.Select(x => x.ToFoodModel()).ToArray(),
+            PageNumber = pagedFoods.PageNumber,
+            PageSize = pagedFoods.PageSize,
+            TotalCount = pagedFoods.TotalCount,
+            TotalPages = pagedFoods.TotalPages
+        };
+    }
+
+    [HttpGet]
+    [Route("user/{userId}/similar/{foodId}/paged")]
+    public PagedFoodModel GetUserSpecificFoodsPaged(int userId, int foodId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var pagedFoods = _foodService.GetUserSpecificFoodsPaged(userId, foodId, pageNumber, pageSize);
+
+        return new PagedFoodModel
+        {
+            Data = pagedFoods.Data.Select(x => x.ToFoodModel()).ToArray(),
+            PageNumber = pagedFoods.PageNumber,
+            PageSize = pagedFoods.PageSize,
+            TotalCount = pagedFoods.TotalCount,
+            TotalPages = pagedFoods.TotalPages
+        };
+    }
 }
