@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Food.Core.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,18 +16,20 @@ public class Repository<T> : IRepository<T> where T : EntityBase
     public void Add(T entity)
     {
         _dbContext.Set<T>().Add(entity);
-        _dbContext.SaveChanges();
     }
 
     public void Update(T entity)
     {
         _dbContext.Entry(entity).State = EntityState.Modified;
-        _dbContext.SaveChanges();
     }
 
     public void Delete(T entity)
     {
         _dbContext.Set<T>().Remove(entity);
+    }
+
+    public void SaveChanges()
+    {
         _dbContext.SaveChanges();
     }
 

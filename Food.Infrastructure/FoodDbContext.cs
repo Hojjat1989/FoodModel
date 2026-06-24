@@ -1,6 +1,4 @@
-﻿using System;
-using Food.Core;
-using Food.Core.Entities;
+﻿using Food.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Food.Infrastructure;
@@ -11,8 +9,6 @@ public class FoodDbContext : DbContext
     {
         ChangeTracker.AutoDetectChangesEnabled = false;
         ChangeTracker.LazyLoadingEnabled = false;
-
-        Database.EnsureCreated();
     }
 
     public DbSet<Food.Core.Entities.Food> Foods { get; set; }

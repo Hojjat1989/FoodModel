@@ -1,5 +1,4 @@
-﻿using System;
-using Food.Application.DTOs;
+﻿using Food.Application.DTOs;
 
 namespace Food.Services.Mapping;
 
@@ -10,8 +9,7 @@ public static class FoodExtensions
         return new FoodDto
         {
             Id = food.Id,
-            Name = food.Name,
-            // set ingredients as well
+            Name = food.Name
         };
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Food.Application;
+﻿using Food.Application;
 using Food.Application.DTOs;
 using Food.Core.Base;
 using Food.Core.Entities;
@@ -9,9 +8,9 @@ namespace Food.Services;
 
 public class FoodService : IFoodService
 {
-    private IRepository<Core.Entities.Food> _foodRepository;
-    private IRepository<UserAllergic> _userAllergicRepository;
-    private IRepository<FoodIngredient> _foodIngredientsRepository;
+    private readonly IRepository<Core.Entities.Food> _foodRepository;
+    private readonly IRepository<UserAllergic> _userAllergicRepository;
+    private readonly IRepository<FoodIngredient> _foodIngredientsRepository;
 
     public FoodService(IRepository<Core.Entities.Food> foodRepository,
         IRepository<UserAllergic> userAllergicRepository,
@@ -27,13 +26,10 @@ public class FoodService : IFoodService
         var userAllergicIngredients = _userAllergicRepository.GetAll(x => x.UserId == userId)
             .Select(x => x.IngredientId).ToArray();
 
-        var foodIngredients = new int[10];
-
         var foods = _foodRepository.GetAll(x =>
-            x.FoodIngredients.All(i => !userAllergicIngredients.Contains(i.Id)));
+            x.FoodIngredients.All(i => !userAllergicIngredients.Contains(i.IngredientId)));
 
-        var result = foods.Select(x => x.ToFoodDto()).ToArray();
-        return result;
+        return foods.Select(x => x.ToFoodDto()).ToArray();
     }
 
     public FoodDto[] GetUserSpecificFoods(int userId, int foodId)
@@ -41,18 +37,18 @@ public class FoodService : IFoodService
         var userAllergicIngredients = _userAllergicRepository.GetAll(x => x.UserId == userId)
             .Select(x => x.IngredientId).ToArray();
 
-        int[] foodIngredients = _foodIngredientsRepository
+        var targetFoodIngredients = _foodIngredientsRepository
             .GetAll(x => x.FoodId == foodId)
             .Select(x => x.IngredientId).ToArray();
-        var commonCount = 0.7 * foodIngredients.Length;
+
+        var commonCount = (int)(0.7 * targetFoodIngredients.Length);
 
         var similarFoods = _foodRepository.GetAll(x =>
-            x.FoodIngredients.Count(i => foodIngredients.Contains(i.IngredientId)) >= commonCount);
+            x.FoodIngredients.Count(i => targetFoodIngredients.Contains(i.IngredientId)) >= commonCount);
 
-        var foods = _foodRepository.GetAll(x =>
-            x.FoodIngredients.All(i => !userAllergicIngredients.Contains(i.Id)));
+        var foods = similarFoods.Where(x =>
+            x.FoodIngredients.All(i => !userAllergicIngredients.Contains(i.IngredientId)));
 
-        var result = foods.Select(x => x.ToFoodDto()).ToArray();
-        return result;
+        return foods.Select(x => x.ToFoodDto()).ToArray();
     }
 }
